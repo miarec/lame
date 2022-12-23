@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+includedir=@PKGCONFIG_INCLUDEDIR@
+libdir=@PKGCONFIG_LIBDIR@
+
+Name: libmp3lame
+Description: LAME Ain't an MP3 Encoder
+Version: @CMAKE_PROJECT_VERSION@
+URL: @PROJECT_URL@
+Libs: -L${libdir} -lmp3lame
+Cflags: -I${includedir}
+
