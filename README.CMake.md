@@ -20,11 +20,17 @@ You can then invoke your build system (line 2). Regardless of whether you used
 a uniform command. You can add `-j 2` to build on two cores, or `-v` to 
 verbosely show commands used to build.
 
+When building on Windows with Visual Studio, a default configuration is Debug.
+To choose Release configuration, add `--config=Release` to the build command:
+
+    cmake --build build --config=Release
+
+
 Finally, you can even run your tests from here, by passing the `test` target 
 to the underlying build system. `-t` (`--target` before CMake 3.15) lets you 
 select a target. 
 
-Install library:
+## Install library:
 
     cmake --build build -t install
 
@@ -43,7 +49,7 @@ To install:
     cd build
     make install
 
-## PICKING A COMPLILER
+## PICKING A COMPILLER
 
 Selecting a compiler must be done on the first run in an empty directory. 
 It's not CMake syntax per se, but you might not be familiar with it. 

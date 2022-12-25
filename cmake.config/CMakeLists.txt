@@ -1,3 +1,7 @@
+# When building with Visual Studio on Windows, a default configuration for try_compile is Debug
+# With CMAKE_TRY_COMPILE_CONFIGURATION, we can choose a specific build configuration.
+set(CMAKE_TRY_COMPILE_CONFIGURATION ${CMAKE_BUILD_TYPE})
+
 include(CheckTypeSize)
 check_type_size("short" SIZEOF_SHORT LANGUAGE C)
 check_type_size("int" SIZEOF_INT LANGUAGE C)
