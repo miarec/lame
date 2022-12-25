@@ -40,13 +40,66 @@ set(PACKAGE_BUGREPORT "lame-dev@lists.sf.net")
 add_subdirectory(cmake.config)
 add_compile_definitions(HAVE_CONFIG_H)
 
+# Location of "config.h" file
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/cmake.config/private)
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # --------------------------------------------------------
-# Include projects from sub directorieds
+# mp3lame library
 # --------------------------------------------------------
-add_subdirectory(libmp3lame)
+add_library(mp3lame)
+
+list( APPEND SOURCES
+   PRIVATE
+      libmp3lame/VbrTag.c
+      libmp3lame/bitstream.c
+      libmp3lame/encoder.c
+      libmp3lame/fft.c
+      libmp3lame/gain_analysis.c
+      libmp3lame/id3tag.c
+      libmp3lame/lame.c
+      libmp3lame/newmdct.c
+      libmp3lame/presets.c
+      libmp3lame/psymodel.c
+      libmp3lame/quantize.c
+      libmp3lame/quantize_pvt.c
+      libmp3lame/reservoir.c
+      libmp3lame/set_get.c
+      libmp3lame/tables.c
+      libmp3lame/takehiro.c
+      libmp3lame/util.c
+      libmp3lame/vbrquantize.c
+      libmp3lame/version.c
+)
+
+if (${WITH_XMM})
+    list( APPEND SOURCES
+        PRIVATE
+            libmp3lame/vector/xmm_quantize_sub.c
+    )
+endif()
+
+target_sources(mp3lame PRIVATE ${SOURCES})
+
+set_target_properties(mp3lame PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/lame.h" 
+    "${CMAKE_BINARY_DIR}/include/lame/lame.h"
+    COPYONLY
+)
+
+target_include_directories(mp3lame
+    PRIVATE 
+        ${CMAKE_CURRENT_SOURCE_DIR}/libmp3lame
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PUBLIC 
+        # where top-level project will look for the library's public headers
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+        # where external projects will look for the library's public headers
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
 
 # ----------------------------------------------------------------------
 # Installation
@@ -65,8 +118,8 @@ install(TARGETS mp3lame
 
 # Header files
 install(
-  FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/lame.h"
-  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+  FILES "${CMAKE_BINARY_DIR}/include/lame/lame.h"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/lame"
 )
 
 # ----------------------------------------------------------------------

@@ -2,7 +2,7 @@
 
 We use CMake to build the project.
 
-Moder CMake (3.14) instructions:
+Modern CMake (3.14) instructions:
 
     cmake -S . -B build
     cmake --build build
